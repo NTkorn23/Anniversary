@@ -1,0 +1,178 @@
+<!DOCTYPE html><html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Anniversary Surprise</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: sans-serif; }
+    body { background: #000; color: white; overflow-x: hidden; }
+    .page { display: none; padding: 20px; height: 100vh; justify-content: center; align-items: center; flex-direction: column; text-align: center; position: relative; }
+    .page.active { display: flex; }
+    button { margin-top: 20px; padding: 10px 20px; font-size: 16px; border: none; background: #ff69b4; color: white; border-radius: 10px; cursor: pointer; }
+    #carousel { display: flex; overflow-x: scroll; width: 100%; gap: 10px; padding: 20px; scroll-snap-type: x mandatory; }
+    #carousel img { width: 300px; height: auto; scroll-snap-align: center; border-radius: 10px; }
+    .heart { position: absolute; bottom: 0; animation: floatUp 5s linear infinite; color: red; font-size: 24px; }
+    @keyframes floatUp { 0% { transform: translateY(0); opacity: 1; } 100% { transform: translateY(-100vh); opacity: 0; } }
+    #jigsawContainer { display: grid; grid-template-columns: repeat(3, 100px); gap: 5px; justify-content: center; margin-top: 20px; }
+    .jigsaw-piece { width: 100px; height: 100px; background-size: 300px 300px; cursor: pointer; }
+    #videoPlayer { width: 80vw; max-width: 640px; border-radius: 15px; }
+  </style>
+</head>
+<body>
+  <div class="page active" id="page1">
+    <h2>ใส่รหัสผ่าน 4 หลัก</h2>
+    <input type="password" id="password" maxlength="4" />
+    <button onclick="checkPassword()">เข้าสู่ระบบ</button>
+    <img src="/storage/emulated/0/Pictures/html/101.jpeg" alt="รูปภาพ" width="200" style="margin-top:20px;">
+  </div>  <div class="page" id="page2">
+    <h2>สุขสันต์วันครบรอบ<br>ขอให้อยู่ด้วยกันแบบนี้ไปนานๆนะ<br>ขอบคุณที่เข้ามาในชีวิต<br>ทำให้ชีวิตของเค้ามีความสุขที่สุด<br>กรรักป๋อมมากๆนะครับ</h2>
+    <div id="carousel">
+      <img src="/storage/emulated/0/Pictures/(html)/01.jpg" />
+      <img src="/storage/emulated/0/Pictures/(html)/02.jpeg" />
+      <img src="/storage/emulated/0/Pictures/(html)/03.jpeg" />
+      <img src="/storage/emulated/0/Pictures/(html)/04.jpeg" />
+      <img src="/storage/emulated/0/Pictures/(html)/05.jpeg" />
+      <img src="/storage/emulated/0/Pictures/(html)/06.jpg" />
+      <img src="/storage/emulated/0/Pictures/(html)/07.jpg" />
+      <img src="/storage/emulated/0/Pictures/(html)/08.jpg" />
+      <img src="/storage/emulated/0/Pictures/(html)/09.jpg" />
+      <img src="/storage/emulated/0/Pictures/(html)/10.jpeg" />
+      <img src="img11.jpg" />
+      <img src="img12.jpg" />
+      <img src="img13.jpg" />
+      <img src="img14.jpg" />
+      <img src="img15.jpg" />
+    </div>
+    <button onclick="nextPage()">ถัดไป</button>
+  </div>  <div class="page" id="page3">
+    <h2>จิ๊กซอว์</h2>
+    <div id="jigsawContainer"></div>
+    <img src="/storage/emulated/0/Download/300x300.jpg" id="jigsawResult" style="display:none; margin-top: 20px; width: 300px;">
+    <h3 id="jigsawText" style="display:none;">ที่รักเก่งมากๆเลย ♥️</h3>
+    <div id="hearts"></div>
+    <button onclick="nextPage()">ถัดไป</button>
+  </div>  <div class="page" id="page4">
+    <h2>เราอยู่ด้วยกันมาแล้ว</h2>
+    <h1 id="timer"></h1>
+    <button onclick="nextPage()">ถัดไป</button>
+  </div>  <div class="page" id="page5">
+    <h2 id="seqText">เตรียมตัวให้พร้อม</h2>
+    <button onclick="nextText()">ถัดไป</button>
+  </div>  <div class="page" id="page6">
+    <h2>ขอบคุณที่รักกัน</h2>
+    <video id="videoPlayer" controls>
+      <source src="/storage/emulated/0/Pictures/Screenshots/Screenrecording_20250728_101505.mp4" type="video/mp4">
+    </video>
+    <br><br>
+    <button onclick="goToPage(2)">ย้อนกลับไปหน้าแรก</button>
+  </div>  <audio id="bgMusic" loop>
+    <source src="your_music.mp3" type="audio/mpeg" />
+  </audio>  <script>
+    let currentPage = 1;
+    const pages = document.querySelectorAll('.page');
+    const passwordInput = document.getElementById('password');
+    const jigsawPieces = [];
+
+    function checkPassword() {
+      if (passwordInput.value === '3010') {
+        goToPage(2);
+        document.getElementById('bgMusic').play();
+      } else {
+        alert('รหัสผ่านไม่ถูกต้อง');
+      }
+    }
+
+    function nextPage() {
+      goToPage(++currentPage);
+    }
+
+    function goToPage(pageNum) {
+      pages.forEach((p, i) => p.classList.toggle('active', i === pageNum - 1));
+      currentPage = pageNum;
+    }
+
+    // Page 3: simple jigsaw
+    const container = document.getElementById('jigsawContainer');
+    const positions = [];
+    for (let i = 0; i < 9; i++) positions.push(i);
+    positions.sort(() => Math.random() - 0.5);
+    positions.forEach(i => {
+      const div = document.createElement('div');
+      div.className = 'jigsaw-piece';
+      div.style.backgroundImage = 'url("/storage/emulated/0/Download/300x300.jpg")';
+      div.style.backgroundPosition = `-${(i % 3) * 100}px -${Math.floor(i / 3) * 100}px`;
+      div.dataset.index = i;
+      div.onclick = () => swapPiece(div);
+      container.appendChild(div);
+      jigsawPieces.push(div);
+    });
+
+    let first = null;
+    function swapPiece(piece) {
+      if (!first) {
+        first = piece;
+        piece.style.border = '2px solid yellow';
+      } else {
+        const temp = piece.style.backgroundPosition;
+        piece.style.backgroundPosition = first.style.backgroundPosition;
+        first.style.backgroundPosition = temp;
+        first.style.border = 'none';
+        first = null;
+        checkComplete();
+      }
+    }
+
+    function checkComplete() {
+      const correct = jigsawPieces.every((p, i) => {
+        const x = -(i % 3) * 100 + 'px';
+        const y = -Math.floor(i / 3) * 100 + 'px';
+        return p.style.backgroundPosition === `${x} ${y}`;
+      });
+      if (correct) {
+        document.getElementById('jigsawResult').style.display = 'block';
+        document.getElementById('jigsawText').style.display = 'block';
+        createHearts();
+      }
+    }
+
+    function createHearts() {
+      for (let i = 0; i < 30; i++) {
+        const heart = document.createElement('div');
+        heart.className = 'heart';
+        heart.innerText = '♥️';
+        heart.style.left = Math.random() * 100 + '%';
+        heart.style.animationDelay = i * 0.3 + 's';
+        document.getElementById('hearts').appendChild(heart);
+      }
+    }
+
+    // Page 4 timer
+    const startDate = new Date('2014-10-30T00:00:00');
+    const timerEl = document.getElementById('timer');
+    setInterval(() => {
+      const now = new Date();
+      const diff = now - startDate;
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+      const minutes = Math.floor((diff / (1000 * 60)) % 60);
+      const seconds = Math.floor((diff / 1000) % 60);
+      timerEl.innerText = `${days} วัน ${hours} ชม. ${minutes} นาที ${seconds} วินาที`;
+    }, 1000);
+
+    // Page 5 text sequence
+    const texts = [
+      'เตรียมตัวให้พร้อม',
+      'เรากำลังออกจากโลก',
+      'ยินดีต้อนรับสู่จักวาลความทรงจำของเรา'
+    ];
+    let textIndex = 0;
+    function nextText() {
+      textIndex++;
+      if (textIndex < texts.length) {
+        document.getElementById('seqText').innerText = texts[textIndex];
+      } else {
+        nextPage();
+      }
+    }
+  </script></body>
+</html>
